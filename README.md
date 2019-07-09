@@ -1,12 +1,10 @@
 # <div style='text-align: center' >MeTL Instructions for Group 1 Summer 2019</div>
 
-<div style='text-align: center; margin-top: 50px' ><em>To see the original readme click <a href='./README-ORIGINAL.md'>HERE</a></em></div>
+<em>To see the original readme click <a href='./README-ORIGINAL.md'>HERE</a></em>
 
 ### Circle CI Status
 
 [![CircleCI](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1.svg?style=svg&circle-token=308fc48a52f975c5619922e850e96ccce3484fa2)](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1)
-
-<div style='margin-top: 50px'></div>
 
 ## Getting Started
 
@@ -39,8 +37,6 @@
 - On the left hand side you may see a list of repo's, scroll down and click on 1 `saintleocom430/com430-devopprojectgrp1`, if you don't see it click on `clone repository from internet` and then add `saintleocom430/com430-devopprojectgrp1`.
 
 - Choose your desired local path and click clone.
-
-<div style='margin-top: 80px'></div>
 
 ## Installation and Configuration
 
@@ -136,8 +132,6 @@ See [Logback](https://logback.qos.ch/manual/index.html) for more detail.
 - `metl.stopwatch.minimumLog="1000"` requires that an action take longer than 1s before it is logged.
 - `stackable.spending=enabled` enables use of third-party services defined in [README-config.md](README-config.md). This will also require configuring access credentials for each service.
 
-<div style='margin-top: 80px'></div>
-
 ## Run
 
 To run a local (development) server for this app, use:
@@ -157,7 +151,5 @@ To run a local (development) server for this app, use:
 <em>\*\* Note: It is not good practice to give RWX to everyone, but for this project I figured why not.</em>
 
 - Other useful commands include: `sbt container:stop` and `sbt container:restart`.
-
-<div style='margin-top: 80px'></div>
 
 #### More documentation modifications coming soon ....
