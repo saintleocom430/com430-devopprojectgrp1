@@ -4,7 +4,7 @@
 
 ### Circle CI Status
 
-![CircleCI](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1.svg?style=svg&circle-token=308fc48a52f975c5619922e850e96ccce3484fa2)
+[![CircleCI](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1.svg?style=svg&circle-token=308fc48a52f975c5619922e850e96ccce3484fa2)](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1)
 
 <div style='margin-top: 50px'></div>
 
