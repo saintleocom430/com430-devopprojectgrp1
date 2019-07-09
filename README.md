@@ -144,7 +144,7 @@ To run a local (development) server for this app, use:
 
 <em>\*\* I had issues running sbt container:start for mac & linux. Temp workaround:</em>
 
-    $ chmod 777 .sbt.sh
+    $ chmod 777 sbt.sh
 
     $ ./sbt.sh compile
 
