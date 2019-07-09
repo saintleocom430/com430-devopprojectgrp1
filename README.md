@@ -2,7 +2,9 @@
 
 <div style='text-align: center; margin-top: 50px' ><em>To see the original readme click <a href='./README-ORIGINAL.md'>HERE</a></em></div>
 
-[![CircleCI](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1.svg?style=svg)](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1)
+### Circle CI Status
+
+![CircleCI](https://circleci.com/gh/saintleocom430/com430-devopprojectgrp1.svg?style=svg&circle-token=308fc48a52f975c5619922e850e96ccce3484fa2)
 
 <div style='margin-top: 50px'></div>
 
