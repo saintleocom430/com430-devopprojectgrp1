@@ -3246,6 +3246,17 @@ var Modes = (function(){
             deactivate:function(){
                 unregisterPositionHandlers(board);
             }
-        }
+        },
+        message: {
+            name: "message",
+            activate: function() {
+                Modes.currentMode.deactivate();
+                Modes.currentMode = Modes.message;
+                setActiveMode("#messageTools", "#messageMode");
+              },
+              deactivate: function() {
+                removeActiveMode();
+              }
+          }
     }
 })();

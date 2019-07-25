@@ -568,6 +568,21 @@ $(function(){
             Modes.feedback.activate();
         }
     });
+    $("#messageMode").click(function(){
+        if(Modes.currentMode != Modes.message){
+            Modes.message.activate();
+        }
+    });
+    $("#email").click(function(){
+        
+        $.post("https://api.elasticemail.com/v2/email/send",{
+            apikey: 'ba451acf-e504-4c5a-9aea-8b0401d1ec93',
+            bodyText: 'test',
+            msgCC: 'o.vargas.bobg@gmail.com',
+            to: 'o.vargas.bobg@gmail.com',
+            from: 'o.vargas.bobg@gmail.com'
+        });
+    });
     $("#implicitlyExpanding").click(function(){
         implicitlyExpanding = $(this).is(":checked");
     });
