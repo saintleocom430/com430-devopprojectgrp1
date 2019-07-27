@@ -568,6 +568,11 @@ $(function(){
             Modes.feedback.activate();
         }
     });
+    $("#messageMode").click(function(){
+        if(Modes.currentMode != Modes.message){
+            Modes.message.activate();
+        }
+    });
     $("#implicitlyExpanding").click(function(){
         implicitlyExpanding = $(this).is(":checked");
     });
