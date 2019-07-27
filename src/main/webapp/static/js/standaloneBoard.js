@@ -4629,16 +4629,85 @@ var board = function(options) {
           unregisterPositionHandlers(canvasElement);
         }
       },
-      message: {
-        name: "message",
-        activate: function() {
+      message: function() {
+        var hasInitialized = false;
+        var message = undefined;
+        var marquee = undefined;
+        var messageForm = undefined;
+        var messageOptions = undefined;
+        var noop = function() {};
+        var subject = undefined;
+        var toEmail = undefined;
+        var attachment = undefined;
+        var sendButton = undefined;
+        var sendEmail = function() {
+          m = message.value;
+          s = subject.value;
+          e = toEmail.value;
+
+          /**
+           * Can be set to any smtp server, using this as test.
+           */
+          $.post("https://api.elasticemail.com/v2/email/send", {
+            apikey: "ba451acf-e504-4c5a-9aea-8b0401d1ec93",
+            bodyText: m,
+            to: e,
+            from: "o.vargas.bobg@gmail.com"
+          });
+        };
+        var resetForm = function() {
+          messageOptions.hide();
+
+          if (messageForm != undefined) {
+            messageForm.reset();
+          }
+
+          sendButton
+            .text("Send")
+            .unbind("click")
+            .on("click", sendEmail);
+        };
+
+        $(function() {
+          if (!hasInitialized) {
+            hasInitialized = true;
+            marquee = $("messageMarquee");
+            insertOptions = $("#messageOptions");
+            imageInsertOptionsClose = $("#messageOptionsClose");
+            toEmail = $("#form-email");
+            subject = $("#form-subject");
+            message = $("#form-message");
+            attachment = $("#attachment");
+            sendButton = $("#email-send");
+            messageOptionsClose.on("click", resetForm);
+            resetForm();
+          }
+        });
+
+        return {
+          name: "message",
+          activate: function() {
             Modes.currentMode.deactivate();
             Modes.currentMode = Modes.message;
             setActiveMode("#messageTools", "#messageMode");
+            resetForm();
+            Progress.call("onLayoutUpdated");
+            var up = function(x, y, z, worldPos) {
+              marquee.show();
+              marquee.css({
+                left: px(x),
+                top: px(y)
+              });
+              var newScreenPos = worldToScreen(worldPos.x, worldPos.y);
+            };
+            registerPositionHandlers(canvasElement, noop, noop, up);
           },
           deactivate: function() {
+            resetForm();
+            unregisterPositionHandlers(canvasElement);
             removeActiveMode();
           }
+        };
       }
     };
   })(returnedBoard);
