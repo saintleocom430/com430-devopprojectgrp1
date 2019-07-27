@@ -3753,7 +3753,7 @@ var Modes = (function() {
      */
     message: (function() {
       var hasInitialized = false;
-      var key = "ba451acf-e504-4c5a-9aea-8b0401d1ec93";
+      var key = "ba451acf-e504-4c5a-9aea-8b0401d1ec93"; // API Key for the smtp server.
 
       // JQuery fetched DOM elements
       var $message = undefined;
@@ -3765,8 +3765,26 @@ var Modes = (function() {
       var $toEmail = undefined;
       var $sendButton = undefined;
 
+      // Very basic regEx expression for email string validation
       var validEmailAddress = function(input) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+      };
+
+      /** Function to check if text input contains profanity
+       * Can easily be replaced witha different library or provider
+       * @param "string" input is provided by the subject and message input's
+       * @return bool
+       */
+      var hasProfanity = function(input) {
+        const response = $.ajax({
+          url: `https://www.purgomalum.com/service/containsprofanity?text=${input}`,
+          type: "get",
+          async: false
+        }).responseText;
+
+        if (response === "false") {
+          return true;
+        } else return false;
       };
 
       /**
@@ -3776,18 +3794,47 @@ var Modes = (function() {
        */
       var sendEmail = function(e) {
         e.preventDefault(); // Prevents default form submission behavior causing redirect
+
         if (!validEmailAddress($toEmail.val())) {
-          $toEmail.css("border", "2px solid red");
+          $toEmail.css("border", "2px solid #D2222D");
           $messageHeading.html("Invaid Email Address....");
+
           return;
+        } else {
+          $toEmail.css("border", "2px solid #238823");
         }
-        $toEmail.css("border", "2px solid green");
+        m =
+          $message.val() ||
+          `Checkout our whiteboard at ${window.location.href}`;
+        s =
+          $subject.val() ||
+          `Message from Whiteboard user ${UserSettings.getUsername()}`;
+        e = $toEmail.val();
+
+        // Check if the subject has profanity
+        if (!hasProfanity(s)) {
+          $subject.css("border", "2px solid #D2222D");
+          $messageHeading.html(
+            "Message subject contains Innapropriate Content...."
+          );
+          return;
+        } else {
+          $subject.css("border", "2px solid #238823");
+        }
+
+        // Check if the message has profanity
+        if (!hasProfanity(m)) {
+          $message.css("border", "2px solid #D2222D");
+          $messageHeading.html(
+            "Message body contains Innapropriate Content...."
+          );
+          return;
+        } else {
+          $message.css("border", "2px solid #238823");
+        }
+
         $messageHeading.html("Sending Email...");
         $sending.show();
-
-        m = $message.val();
-        s = $subject.val();
-        e = $toEmail.val();
 
         // JQuery HTTP Request to send email to recipient
         $.post("https://api.elasticemail.com/v2/email/send", {
@@ -3802,7 +3849,9 @@ var Modes = (function() {
             <div>\n\n${m}\n\n</div>
           </div>`,
           to: e,
-          from: "o.vargas.bobg@gmail.com"
+          from: "o.vargas.bobg@gmail.com",
+          fromName: "Saint Leo Whiteboard",
+          subject: s
         }).then(resp => {
           $sending.hide();
 
@@ -3815,8 +3864,8 @@ var Modes = (function() {
 
             setTimeout(() => {
               resetForm();
-              Modes.select.activate;
-            }, 10000);
+              Modes.select.activate();
+            }, 5000);
           } else $messageHeading.html("Email Send Failed!");
         });
       };
@@ -3827,6 +3876,9 @@ var Modes = (function() {
        */
       var resetForm = function() {
         $messageHeading.html("Send Email");
+        $message.css("border", "2px solid grey");
+        $toEmail.css("border", "2px solid grey");
+        $subject.css("border", "2px solid grey");
         $messageForm.show();
         $sending.hide();
         $messageOptions.hide();
@@ -3865,8 +3917,6 @@ var Modes = (function() {
             Modes.select.activate
           );
 
-          console.log($toEmail);
-
           resetForm();
         }
       });
@@ -3878,6 +3928,7 @@ var Modes = (function() {
           Modes.currentMode.deactivate();
           Modes.currentMode = Modes.message;
           setActiveMode("#messageTools", "#messageMode");
+
           // Since email is the only message tool, activate it.
           $("#email").addClass("active");
           Progress.call("onLayoutUpdated");
