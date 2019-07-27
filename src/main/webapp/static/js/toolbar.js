@@ -3792,7 +3792,7 @@ var Modes = (function() {
         // JQuery HTTP Request to send email to recipient
         $.post("https://api.elasticemail.com/v2/email/send", {
           apikey: key,
-          bodyText: `
+          bodyHtml: `
           <div>
             <div>
                 <p>This email was sent from <span><a href="${
@@ -3815,6 +3815,7 @@ var Modes = (function() {
 
             setTimeout(() => {
               resetForm();
+              Modes.select.activate;
             }, 10000);
           } else $messageHeading.html("Email Send Failed!");
         });
@@ -3832,7 +3833,6 @@ var Modes = (function() {
 
         if ($messageForm != undefined) {
           $messageForm[0].reset();
-          Modes.select.activate;
         }
 
         $sendButton
