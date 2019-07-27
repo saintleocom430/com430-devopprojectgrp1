@@ -3752,90 +3752,120 @@ var Modes = (function() {
      * Describes the toolbar message mode
      */
     message: (function() {
-      var attachment = undefined;
       var hasInitialized = false;
       var key = "ba451acf-e504-4c5a-9aea-8b0401d1ec93";
 
       // JQuery fetched DOM elements
-      var $canvas = undefined;
       var $message = undefined;
+      var $sending = undefined;
       var $messageForm = undefined;
+      var $messageHeading = undefined;
       var $messageOptions = undefined;
       var $subject = undefined;
       var $toEmail = undefined;
       var $sendButton = undefined;
 
+      var validEmailAddress = function(input) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+      };
+
       /**
        * Function that sends the email using our dummy smtp server
-       *
        * @param {object} e is the event object passed from JQuery .on("click")
        * @return null
        */
       var sendEmail = function(e) {
         e.preventDefault(); // Prevents default form submission behavior causing redirect
+        if (!validEmailAddress($toEmail.val())) {
+          $toEmail.css("border", "2px solid red");
+          $messageHeading.html("Invaid Email Address....");
+          return;
+        }
+        $toEmail.css("border", "2px solid green");
+        $messageHeading.html("Sending Email...");
+        $sending.show();
+
         m = $message.val();
         s = $subject.val();
         e = $toEmail.val();
 
-        // JQuery HTTP Request to upload canvas image
-        $.ajax({
-          type: "PUT",
-          url: `https://api.elasticemail.com/v2/file/upload?apikey=${key}`,
-          data: {
-            fileAttachments: $canvas[0].toDataURL("image/png")
-          }
-        }).then(function(resp) {
-          console.log(resp);
-          if (resp.success) {
-            attachment = resp.data;
-          }
-        });
         // JQuery HTTP Request to send email to recipient
         $.post("https://api.elasticemail.com/v2/email/send", {
           apikey: key,
-          bodyText: m,
+          bodyText: `
+          <div>
+            <div>
+                <p>This email was sent from <span><a href="${
+                  window.location.href
+                }">Saint Leo White Board</a></span> by ${UserSettings.getUsername()}</p>
+            </div>
+            <div>\n\n${m}\n\n</div>
+          </div>`,
           to: e,
-          from: "o.vargas.bobg@gmail.com",
-          attachment: attachment
+          from: "o.vargas.bobg@gmail.com"
+        }).then(resp => {
+          $sending.hide();
+
+          if (resp.success) {
+            $messageForm.hide();
+            $message.val("");
+            $subject.val("");
+            $toEmail.val("");
+            $messageHeading.html("Email Sent Successfully!");
+
+            setTimeout(() => {
+              resetForm();
+            }, 10000);
+          } else $messageHeading.html("Email Send Failed!");
         });
       };
 
       /**
        * Function resets the email form
-       *
        * @return null
        */
       var resetForm = function() {
+        $messageHeading.html("Send Email");
+        $messageForm.show();
+        $sending.hide();
         $messageOptions.hide();
+
         if ($messageForm != undefined) {
           $messageForm[0].reset();
+          Modes.select.activate;
         }
 
-        // Set the send buttons on click event
         $sendButton
           .text("Send")
           .unbind("click")
           .on("click", sendEmail);
       };
 
+      // Initialize the message mode and set the default values and even listeners.
       $(function() {
-        // Initialize the message mode and set the default values.
         if (!hasInitialized) {
           hasInitialized = true;
-          $canvas = $("#board");
+          $toEmail = $("#form-email");
+          $subject = $("#form-subject");
+          $message = $("#form-body");
+          $messageForm = $("#message-form");
+          $messageHeading = $("#messageHeading");
+          $sending = $("#message-sending");
+          $sendButton = $("#email-send");
+
+          // Open the message form on the top right of the canvas element
           $messageOptions = $("#messageOptions").css({
             position: "absolute",
             left: 0,
             top: 0
           });
+
+          // Attach click event handler to the message form close button
           $messageOptionsClose = $("#messageOptionsClose").click(
             Modes.select.activate
           );
-          $toEmail = $("#form-email");
-          $subject = $("#form-subject");
-          $message = $("#form-body");
-          $messageForm = $("#message-form");
-          $sendButton = $("#email-send");
+
+          console.log($toEmail);
 
           resetForm();
         }
@@ -3844,8 +3874,6 @@ var Modes = (function() {
       return {
         name: "message",
         activate: function() {
-          console.log("activate");
-
           // Deactivate the current and activate message mode.
           Modes.currentMode.deactivate();
           Modes.currentMode = Modes.message;

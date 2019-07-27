@@ -27,12 +27,13 @@
   <div id="messageAdorner">
       <div id="messageMarque"></div>
       <div id="messageOptions" class="block with-border input-full-width">
-        <h2 class="med-txt nmt"><strong><label class="nm">Send Email</label></strong></h2>
+        <h2 class="med-txt nmt"><strong><label id="messageHeading" class="mlrt">Send Email</label></strong></h2>
         <button id="messageOptionsClose" class=" btn-close fa fa-times nmt"><span class="hidden">Close</span></button>
+        <img src="/static/images/spinner.gif" id="message-sending"></img>
         <form id="message-form">
-        <div>
+        <div id='email-input'>
           <label for="form-email">Email</label>
-        <input id="form-email" type="email" />
+        <input id="form-email" type="email" multiple/>
         </div>
         <div>
           <label for="form-subject">Subject</label>

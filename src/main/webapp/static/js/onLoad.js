@@ -570,7 +570,6 @@ $(function(){
     });
     $("#messageMode").click(function(){
         if(Modes.currentMode != Modes.message){
-            console.log(Modes.message);
             Modes.message.activate();
         }
     });
