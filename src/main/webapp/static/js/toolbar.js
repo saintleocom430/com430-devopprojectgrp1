@@ -3849,7 +3849,7 @@ var Modes = (function() {
             <div>\n\n${m}\n\n</div>
           </div>`,
           to: e,
-          from: "o.vargas.bobg@gmail.com",
+          from: "sluwhiteboard@gmail.com",
           fromName: "Saint Leo Whiteboard",
           subject: s
         }).then(resp => {
@@ -3865,7 +3865,7 @@ var Modes = (function() {
             setTimeout(() => {
               resetForm();
               Modes.select.activate();
-            }, 5000);
+            }, 10000);
           } else $messageHeading.html("Email Send Failed!");
         });
       };
