@@ -3756,6 +3756,7 @@ var Modes = (function() {
       var key = "ba451acf-e504-4c5a-9aea-8b0401d1ec93"; // API Key for the smtp server.
 
       // JQuery fetched DOM elements
+      var $formInfo = undefined;
       var $message = undefined;
       var $sending = undefined;
       var $messageForm = undefined;
@@ -3764,6 +3765,7 @@ var Modes = (function() {
       var $subject = undefined;
       var $toEmail = undefined;
       var $sendButton = undefined;
+      var $cancelButton = undefined;
 
       // Very basic regEx expression for email string validation
       var validEmailAddress = function(input) {
@@ -3794,8 +3796,16 @@ var Modes = (function() {
        */
       var sendEmail = function(e) {
         e.preventDefault(); // Prevents default form submission behavior causing redirect
+        var emailsValid = true;
+        var emailIndex = 0;
+        var emails = $toEmail.val().split(",");
 
-        if (!validEmailAddress($toEmail.val())) {
+        while (emailsValid && emailIndex < emails.length) {
+          emailsValid = validEmailAddress(emails[emailIndex]);
+          emailIndex++;
+        }
+
+        if (!emailsValid) {
           $toEmail.css("border", "2px solid #D2222D");
           $messageHeading.html("Invaid Email Address....");
 
@@ -3855,8 +3865,9 @@ var Modes = (function() {
         }).then(resp => {
           $sending.hide();
 
-          if (resp.success) {
+          if (resp.success === true) {
             $messageForm.hide();
+            $formInfo.hide();
             $message.val("");
             $subject.val("");
             $toEmail.val("");
@@ -3870,6 +3881,13 @@ var Modes = (function() {
         });
       };
 
+      var cancelEmail = function() {
+        resetForm();
+        unregisterPositionHandlers(board);
+        removeActiveMode();
+        Modes.select.activate();
+      };
+
       /**
        * Function resets the email form
        * @return null
@@ -3880,6 +3898,7 @@ var Modes = (function() {
         $toEmail.css("border", "2px solid grey");
         $subject.css("border", "2px solid grey");
         $messageForm.show();
+        $formInfo.show();
         $sending.hide();
         $messageOptions.hide();
 
@@ -3891,12 +3910,17 @@ var Modes = (function() {
           .text("Send")
           .unbind("click")
           .on("click", sendEmail);
+        $cancelButton
+          .text("Cancel")
+          .unbind("click")
+          .on("click", cancelEmail);
       };
 
       // Initialize the message mode and set the default values and even listeners.
       $(function() {
         if (!hasInitialized) {
           hasInitialized = true;
+          $formInfo = $("#formInfo");
           $toEmail = $("#form-email");
           $subject = $("#form-subject");
           $message = $("#form-body");
@@ -3904,6 +3928,7 @@ var Modes = (function() {
           $messageHeading = $("#messageHeading");
           $sending = $("#message-sending");
           $sendButton = $("#email-send");
+          $cancelButton = $("#email-cancel");
 
           // Open the message form on the top right of the canvas element
           $messageOptions = $("#messageOptions").css({

@@ -30,20 +30,24 @@
         <h2 class="med-txt nmt"><strong><label id="messageHeading" class="mlrt">Send Email</label></strong></h2>
         <button id="messageOptionsClose" class=" btn-close fa fa-times nmt"><span class="hidden">Close</span></button>
         <img src="/static/images/spinner.gif" id="message-sending"></img>
+        <div id="formInfo" class="smallest-text mtbd"><em>Please enter one or more emails seperated by a comma.</em></div>
         <form id="message-form">
         <div id='email-input'>
-          <label for="form-email">Email</label>
-        <input id="form-email" type="email" multiple/>
+          <label for="form-email">Email(s)</label>
+          <input id="form-email" type="email" multiple/>
         </div>
         <div>
           <label for="form-subject">Subject</label>
-        <input id="form-subject" type="text" />
+          <input id="form-subject" type="text" />
         </div>
         <div>
           <label for="form-body">Message</label>
         <textarea id="form-body"></textarea>
         </div>
-          <button type="submit" id="email-send">Send Message</button>
+        <div class="flex-container-row">
+          <button type="submit" id="email-send" style="border: 1px solid black; border-radius: 2px">Send</button>
+          <button type="button" id="email-cancel">Cancel</button>
+        </div>
         </form>
       </div>
 </div>

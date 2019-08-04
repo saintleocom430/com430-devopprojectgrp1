@@ -1,6 +1,6 @@
 # <div style='text-align: center' >MeTL Instructions for Group 1 Summer 2019</div>
 
-<em>To see the original readme click <a href='./README-ORIGINAL.md'>HERE</a></em>
+To see the original readme click [HERE](./README-ORIGINAL.md)
 
 ### Circle CI Status
 
@@ -142,14 +142,38 @@ To run a local (development) server for this app, use:
 
 #### <em>Mac/Linux</em>
 
-<em>\*\* I had issues running sbt container:start for mac & linux. Temp workaround:</em>
+    $ chmod u+x sbt.sh
 
-    $ chmod 777 sbt.sh
+    $ ./sbt.sh
 
-    $ ./sbt.sh compile
-
-<em>\*\* Note: It is not good practice to give RWX to everyone, but for this project I figured why not.</em>
+    $ container:start
 
 - Other useful commands include: `sbt container:stop` and `sbt container:restart`.
+
+## When Developing do this...
+
+Never modify or commit changes directly to master. Instead do the following steps (command line instructions):
+
+- Create a new branch for your feature
+  - `git checkout -b feature_name origin/feature_name`
+- Modify your branch
+  - When programming in your new branch start sbt interactively by running `~container:start`
+  - After making changes to html you don't have to refresh. Changes to Javascript you need to run `./minify.sh` (linux/mac) `./minify.bat` (windows).
+  - Because you are interactive you can simply refresh the browser when it is complete and see the changes.
+- Commit your changes
+  - When your ready to commit save your work and then `git commit -am "desciption of your changes"` then `git push`
+- open up a Pull Request
+  - In GitHub go to your repositories Pull Request tab
+  - Click on New Pull Request
+  - Keep base:master and change compare:master to your feature branch.
+  - Add a describe your changes and then open the Pull Request.
+- Approve the Pull Request
+  - Have someone else with write permissions review your code
+  - When they are ready, have them scroll down until they see "add review" and have them approve or request changes.
+- Merge the PR
+  - Once approved you should have the option to merge. Merge takes your branch and adds it to the master exactly as is. If you have a lot of meaningless commits, I recommend Squash and Merge. This takes all of your commits and squashes them all into one commit before adding your changes to master. This is useful when you want to keep your master branches commit history clean and organized. Up to your team how you want to handle this.
+  - And your done.
+- Update your local master branch
+  - now on the command line enter `git checkout master` then `git fetch origin` then ``git pull`. This updates your local master branch to include your new changes.
 
 #### More documentation modifications coming soon ....
