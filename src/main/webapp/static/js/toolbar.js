@@ -3767,6 +3767,7 @@ var Modes = (function() {
 
       // Very basic regEx expression for email string validation
       var validEmailAddress = function(input) {
+        console.log(input);
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
       };
 
@@ -3794,8 +3795,17 @@ var Modes = (function() {
        */
       var sendEmail = function(e) {
         e.preventDefault(); // Prevents default form submission behavior causing redirect
+        var emailsValid = true;
+        var emailIndex = 0;
+        var emails = $toEmail.val().split(",");
 
-        if (!validEmailAddress($toEmail.val())) {
+        while (emailsValid && emailIndex < emails.length) {
+          emailsValid = validEmailAddress(emails[emailIndex]);
+          console.log(emails[emailIndex]);
+          emailIndex++;
+        }
+
+        if (!emailsValid) {
           $toEmail.css("border", "2px solid #D2222D");
           $messageHeading.html("Invaid Email Address....");
 
@@ -3855,7 +3865,7 @@ var Modes = (function() {
         }).then(resp => {
           $sending.hide();
 
-          if (resp.success) {
+          if (resp.success === true) {
             $messageForm.hide();
             $message.val("");
             $subject.val("");
