@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: circleci-analytical_metlx-{{checksum "build.sbt"}}  
+          key: circleci-analytical_metlx-{{checksum "build.sbt"}}
       - run: sh ./sbt.sh compile
       - save_cache:
           paths:
@@ -19,9 +19,42 @@ jobs:
             - ~/.ivy2
             - ~/.sbt
             - ~/.sbt-boot
-            - .m2  
-            - .sbt-boot  
-          key: circleci-analytical_metlx-{{checksum "build.sbt"}}  
+            - .m2
+            - .sbt-boot
+          key: circleci-analytical_metlx-{{checksum "build.sbt"}}
       - run: sh ./sbt.sh test
       - store_test_results:
           path: target/test-reports
+  package:
+    environment:
+      IVY_HOME: ~/circleci-analyticalmetlx
+    working_directory: ~/circleci-analyticalmetlx
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: circleci-analytical_metlx-{{checksum "build.sbt"}}
+      - run: sh ./sbt.sh compile
+      - save_cache:
+          paths:
+            - ~/.m2
+            - .sbt
+            - .ivy2
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/.sbt-boot
+            - .m2
+            - .sbt-boot
+          key: circleci-analytical_metlx-{{checksum "build.sbt"}}
+      - run: sh ./sbt.sh package
+      - store_test_results:
+          path: target/test-reports
+workflows:
+  version: 2
+  build_and_package:
+    jobs:
+      - build
+      - package:
+          requires:
+            - build

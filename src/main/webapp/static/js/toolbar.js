@@ -3769,7 +3769,6 @@ var Modes = (function() {
 
       // Very basic regEx expression for email string validation
       var validEmailAddress = function(input) {
-        console.log(input);
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
       };
 
@@ -3803,7 +3802,6 @@ var Modes = (function() {
 
         while (emailsValid && emailIndex < emails.length) {
           emailsValid = validEmailAddress(emails[emailIndex]);
-          console.log(emails[emailIndex]);
           emailIndex++;
         }
 
